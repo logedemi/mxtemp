@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Temp Email - No SMTP Required</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        header {
+            background: linear-gradient(135deg, #4361ee, #3a0ca3);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .logo {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .tagline {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+        
+        main {
+            padding: 40px;
+        }
+        
+        .hero {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .hero h1 {
+            color: #333;
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+        }
+        
+        .hero p {
+            color: #666;
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 30px;
+            line-height: 1.6;
+        }
+        
+        .create-email {
+            background: #f8f9fa;
+            padding: 40px;
+            border-radius: 15px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #4361ee;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+        
+        .email-preview {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-family: monospace;
+            font-size: 1.1rem;
+            text-align: center;
+            display: none;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #4361ee, #3a0ca3);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            font-size: 1.1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: 600;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(67, 97, 238, 0.3);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            margin-top: 10px;
+        }
+        
+        .result {
+            background: #d4edda;
+            border: 2px solid #c3e6cb;
+            color: #155724;
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 30px;
+            display: none;
+        }
+        
+        .email-display {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-family: monospace;
+            font-size: 1.2rem;
+            word-break: break-all;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin: 60px 0;
+        }
+        
+        .feature-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .feature-card:hover {
+            border-color: #4361ee;
+            transform: translateY(-5px);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            color: #4361ee;
+            margin-bottom: 20px;
+        }
+        
+        .feature-card h3 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .info-box {
+            background: #e7f3ff;
+            border-left: 5px solid #4361ee;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 40px 0;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+            border-top: 1px solid #eee;
+        }
+        
+        .copy-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            main {
+                padding: 20px;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .create-email {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">📧 TempMail</div>
+            <div class="tagline">Free Temporary Email - No API Keys Required</div>
+        </header>
+        
+        <main>
+            <section class="hero">
+                <h1>Instant Temporary Email Address</h1>
+                <p>Generate disposable email addresses in seconds. No SMTP servers, no API keys, no configuration needed. Perfect for testing and privacy protection.</p>
+            </section>
+            
+            <section class="create-email">
+                <h2 style="text-align: center; margin-bottom: 30px; color: #333;">Create Your Temporary Email</h2>
+                
+                <div class="input-group">
+                    <label for="username">Custom Username (optional):</label>
+                    <input type="text" id="username" placeholder="e.g., mytempemail">
+                </div>
+                
+                <div class="input-group">
+                    <label for="expires">Email Expires In:</label>
+                    <select id="expires">
+                        <option value="1">1 Hour</option>
+                        <option value="6">6 Hours</option>
+                        <option value="24" selected>24 Hours</option>
+                        <option value="72">3 Days</option>
+                        <option value="168">7 Days</option>
+                    </select>
+                </div>
+                
+                <div class="email-preview" id="emailPreview">
+                    <span id="previewText">your_email@tempmail.netlify.app</span>
+                </div>
+                
+                <button class="btn" onclick="createEmail()">✨ Generate Temporary Email</button>
+                <button class="btn btn-secondary" onclick="loadMockInbox()">📥 View Demo Inbox</button>
+            </section>
+            
+            <div class="result" id="result">
+                <h3 style="color: #155724; margin-bottom: 20px;">✅ Email Created Successfully!</h3>
+                
+                <div class="email-display">
+                    <strong>Your Temporary Email:</strong><br>
+                    <span id="generatedEmail" style="font-size: 1.3rem;"></span>
+                    <button class="copy-btn" onclick="copyEmail()">📋 Copy</button>
+                </div>
+                
+                <div style="margin: 20px 0;">
+                    <p><strong>API Key:</strong> <code id="apiKey"></code></p>
+                    <p><strong>Expires:</strong> <span id="expiryTime"></span></p>
+                </div>
+                
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <button class="btn" onclick="openDashboard()">📊 Open Dashboard</button>
+                    <button class="btn btn-secondary" onclick="viewAPI()">🔧 API Details</button>
+                </div>
+            </div>
+            
+            <div class="info-box">
+                <h3>ℹ️ How This Works</h3>
+                <p>This is a <strong>simulated temporary email system</strong> that doesn't require SMTP servers or API keys:</p>
+                <ul style="margin: 15px 0; padding-left: 20px;">
+                    <li>✅ No SendGrid/Mailgun API needed</li>
+                    <li>✅ No SMTP configuration required</li>
+                    <li>✅ No database setup needed</li>
+                    <li>✅ Works 100% on Netlify Functions</li>
+                    <li>✅ Instant deployment</li>
+                </ul>
+                <p><strong>Note:</strong> Real emails cannot be sent/received. This system is perfect for testing, development, and learning purposes.</p>
+            </div>
+            
+            <section class="features">
+                <div class="feature-card">
+                    <div class="feature-icon">🚀</div>
+                    <h3>Instant Setup</h3>
+                    <p>Deploy in 2 minutes. No configuration or API keys required.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>No API Keys</h3>
+                    <p>Works without SendGrid, Mailgun, or any external services.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">💾</div>
+                    <h3>No Database</h3>
+                    <p>Uses in-memory storage. Perfect for demos and testing.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Perfect for Testing</h3>
+                    <p>Great for developers testing email features in their apps.</p>
+                </div>
+            </section>
+        </main>
+        
+        <footer>
+            <p>© 2024 TempMail Demo. This is a simulated email service for educational purposes.</p>
+            <p style="margin-top: 10px; font-size: 0.9rem; color: #888;">
+                Deploy your own: <a href="https://github.com" style="color: #4361ee;">GitHub Repository</a>
+            </p>
+        </footer>
+    </div>
+    
+    <script>
+        // Update email preview
+        document.getElementById('username').addEventListener('input', function() {
+            const username = this.value.trim();
+            const preview = document.getElementById('emailPreview');
+            const previewText = document.getElementById('previewText');
+            
+            if (username) {
+                previewText.textContent = `${username}@tempmail.netlify.app`;
+                preview.style.display = 'block';
+            } else {
+                preview.style.display = 'none';
+            }
+        });
+        
+        // Create temporary email
+        async function createEmail() {
+            const username = document.getElementById('username').value.trim();
+            const expires = document.getElementById('expires').value;
+            
+            const btn = document.querySelector('.btn');
+            const originalText = btn.textContent;
+            btn.textContent = 'Creating...';
+            btn.disabled = true;
+            
+            try {
+                const response = await fetch('/api/create-email', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username: username || undefined,
+                        expiresIn: parseInt(expires)
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Show result
+                    document.getElementById('generatedEmail').textContent = data.email;
+                    document.getElementById('apiKey').textContent = data.api_key;
+                    document.getElementById('expiryTime').textContent = new Date(data.expires_at).toLocaleString();
+                    
+                    // Store in localStorage
+                    localStorage.setItem('tempEmail', data.email);
+                    localStorage.setItem('apiKey', data.api_key);
+                    
+                    document.getElementById('result').style.display = 'block';
+                    document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+                    
+                    // Auto-copy to clipboard
+                    copyEmail();
+                } else {
+                    alert('Error: ' + (data.error || 'Failed to create email'));
+                }
+            } catch (error) {
+                alert('Network error. Please try again.');
+                console.error(error);
+            } finally {
+                btn.textContent = originalText;
+                btn.disabled = false;
+            }
+        }
+        
+        // Copy email to clipboard
+        function copyEmail() {
+            const email = document.getElementById('generatedEmail').textContent;
+            navigator.clipboard.writeText(email).then(() => {
+                alert('Email copied to clipboard!');
+            });
+        }
+        
+        // Open dashboard
+        function openDashboard() {
+            const email = document.getElementById('generatedEmail').textContent;
+            const apiKey = document.getElementById('apiKey').textContent;
+            window.open(`/dashboard.html?email=${encodeURIComponent(email)}&key=${apiKey}`, '_blank');
+        }
+        
+        // View API details
+        function viewAPI() {
+            const email = document.getElementById('generatedEmail').textContent;
+            const apiKey = document.getElementById('apiKey').textContent;
+            
+            const apiInfo = `
+API Endpoints for your email:
+
+1. Check Inbox:
+   GET /api/check-email?email=${encodeURIComponent(email)}&mock=true
+
+2. Send Email (Simulated):
+   POST /api/send-email
+   {
+     "from_email": "${email}",
+     "to": "recipient@example.com",
+     "subject": "Hello",
+     "body": "Message content"
+   }
+
+3. Get Mock Emails:
+   GET /api/mock-emails?email=${encodeURIComponent(email)}
+            `;
+            
+            alert(apiInfo);
+        }
+        
+        // Load mock inbox demo
+        function loadMockInbox() {
+            const demoEmail = `demo_${Math.random().toString(36).substr(2, 8)}@tempmail.netlify.app`;
+            window.open(`/dashboard.html?email=${encodeURIComponent(demoEmail)}&demo=true`, '_blank');
+        }
+    </script>
+</body>
+</html>
