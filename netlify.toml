@@ -5,7 +5,6 @@
 [functions]
   directory = "api"
   node_bundler = "esbuild"
-  node_bridge = true
 
 [[redirects]]
   from = "/api/*"
