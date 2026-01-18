@@ -1,0 +1,13 @@
+{
+  "name": "temp-email-no-smtp",
+  "version": "1.0.0",
+  "description": "Temporary Email tanpa SMTP/API Key",
+  "main": "index.js",
+  "scripts": {
+    "build": "echo 'No build needed'"
+  },
+  "dependencies": {
+    "@netlify/functions": "^2.0.0",
+    "uuid": "^9.0.0"
+  }
+}
